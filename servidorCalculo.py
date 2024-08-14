@@ -8,7 +8,7 @@ def enviarServidor(ip, puerto, lista):
             respuesta = s.recv(1024).decode()
             return int(respuesta)
     except Exception as e:
-        print(f"Ocurrió un error al conectar con el servidor: {e}")
+        print(f"Ocurrió un error al conectar con el servidor {ip}:{puerto} - {e}")
         return None
 
 def procesarLista(lista):
@@ -18,14 +18,25 @@ def procesarLista(lista):
     subLista1 = lista[:mitad]
     subLista2 = lista[mitad:]
 
-    max1 = enviarServidor('localhost', 5001, subLista1)
-    max2 = enviarServidor('localhost', 5002, subLista2)
+    servidores = [
+        {'ip': 'localhost', 'puerto': 5001, 'sublista': subLista1},
+        {'ip': 'localhost', 'puerto': 5002, 'sublista': subLista2}
+    ]
 
-    if max1 is None or max2 is None:
-        print("Error: Uno o ambos servidores no respondieron correctamente.")
-        return "Error: Servidor no disponible"
+    maximos = []
+    for servidor in servidores:
+        maximo = enviarServidor(servidor['ip'], servidor['puerto'], servidor['sublista'])
+        if maximo is None:
+            # Reintentar con el otro servidor si uno falla
+            print(f"Intentando con el otro servidor para el subarreglo {servidor['sublista']}")
+            otro_servidor = [s for s in servidores if s != servidor][0]
+            maximo = enviarServidor(otro_servidor['ip'], otro_servidor['puerto'], servidor['sublista'])
+            if maximo is None:
+                print("Error: Ambos servidores fallaron.")
+                return "Error: Servidores no disponibles"
+        maximos.append(maximo)
 
-    max_value = max(max1, max2)
+    max_value = max(maximos)
     print(f"Servidor Coordinador encontró el valor máximo: {max_value}")
 
     return str(max_value)
