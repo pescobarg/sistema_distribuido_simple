@@ -18,7 +18,7 @@ def manejar_conexion(conn, addr, port):
                 conn.sendall(str(max_value).encode())
         except Exception as e:
             print(f"Error en el servidor {port}: {e}")
-            conn.sendall("Error: ocurrió un problema en el servidor")
+            conn.sendall("Error")
         finally:
             conn.close()
 

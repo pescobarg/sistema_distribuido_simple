@@ -13,6 +13,8 @@ def enviarServidor(ip, puerto, lista):
             s.connect((ip, puerto))
             s.sendall(str(lista).encode())
             respuesta = s.recv(1024).decode()
+            if respuesta == "Error":
+                return None
             return int(respuesta)
     except socket.timeout:
         print(f"Error: Conexión con {ip}:{puerto} agotó el tiempo.")
