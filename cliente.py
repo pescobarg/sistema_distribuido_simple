@@ -15,6 +15,7 @@ def enviar_datos_al_servidor(lista_datos):
             cliente_socket.connect(('localhost', 5000))
             cliente_socket.sendall(str(lista_datos).encode())  # Enviar la lista como una cadena
             respuesta = cliente_socket.recv(1024).decode()
+            cliente_socket.close()
             return respuesta
     except Exception as e:
         print(f"Ocurrió un error al conectar con el servidor: {e}")

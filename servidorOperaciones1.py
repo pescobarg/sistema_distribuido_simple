@@ -11,15 +11,19 @@ def server_operacion(port):
         while True:
             conn, addr = s.accept()
             with conn:
-                print(f"Conectado por {addr}")
-                data = conn.recv(1024)
-                if not data:
-                    break
-                subarray = eval(data.decode())
-                print(f"Servidor de Operación {port} recibió el subarreglo: {subarray}")
-                max_value = max_in_subarray(subarray)
-                print(f"Servidor de Operación {port} encontró el valor máximo: {max_value}")
-                conn.sendall(str(max_value).encode())
+                try:
+                    print(f"Conectado por {addr}")
+                    data = conn.recv(1024)
+                    if not data:
+                        break
+                    subarray = eval(data.decode())
+                    print(f"Servidor de Operación {port} recibió el subarreglo: {subarray}")
+                    max_value = max_in_subarray(subarray)
+                    print(f"Servidor de Operación {port} encontró el valor máximo: {max_value}")
+                    conn.sendall(str(max_value).encode())
+                except Exception as e:
+                    print(f"Error en el servidor {port}: {e}")
+                    conn.sendall("Error: ocurrió un problema en el servidor")
 
 if __name__ == "__main__":
     import sys
