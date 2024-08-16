@@ -13,7 +13,7 @@ def enviar_datos_al_servidor(lista_datos):
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as cliente_socket:
             cliente_socket.connect(('localhost', 5000))
-            cliente_socket.sendall(str(lista_datos).encode())  # Enviar la lista como una cadena
+            cliente_socket.sendall(str(lista_datos).encode())  
             respuesta = cliente_socket.recv(1024).decode()
             cliente_socket.close()
             return respuesta

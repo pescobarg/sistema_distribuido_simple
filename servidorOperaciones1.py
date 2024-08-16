@@ -11,7 +11,7 @@ def manejar_conexion(conn, addr, port):
             print(f"Conectado por {addr}")
             data = conn.recv(1024)
             if data:
-                subarray = eval(data.decode())  # Ten cuidado con el uso de eval, usa ast.literal_eval si es posible.
+                subarray = eval(data.decode())  
                 print(f"Servidor de Operación {port} recibió el subarreglo: {subarray}")
                 max_value = max_in_subarray(subarray)
                 print(f"Servidor de Operación {port} encontró el valor máximo: {max_value}")
@@ -29,7 +29,7 @@ def server_operacion(port):
         print(f"Servidor de Operación escuchando en el puerto {port}")
         while True:
             conn, addr = s.accept()
-            # Crear un nuevo hilo para manejar la conexión
+            
             hilo = threading.Thread(target=manejar_conexion, args=(conn, addr, port))
             hilo.start()
 
